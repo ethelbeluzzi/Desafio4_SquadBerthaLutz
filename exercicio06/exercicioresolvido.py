@@ -1,31 +1,18 @@
-"""
-Vamos construir um jogo de forca. O programa escolherá
-aleatoriamente uma palavra secreta de uma lista predefinida. A palavra
-secreta será representada por espaços em branco, um para cada letra
-da palavra. O jogador terá um número limitado de 6 tentativas. Em cada
-tentativa, o jogador pode fornecer uma letra. Se a letra estiver presente
-na palavra secreta, ela será revelada nas posições correspondentes. Se
-a letra não estiver na palavra, uma mensagem de erro deverá ser
-informada. Após um número máximo de erros, o jogador perde. O jogo
-continua até que o jogador adivinhe a palavra ou exceda o número
-máximo de tentativas.
-Dica: Você precisará importar uma biblioteca para resolver esse
-exercício
-"""
 #importa a biblioteca random
 import random
-
-#define uma lista de palavras
-palavras = ["gato", "cachorro", "pássaro",
-            "elefante", "girafa", "macaco",
-            "leão", "tigre", "cobra", "peixe"
-            ]
 
 def selecao_palavra():
     """
     usa a biblioteca random para escolher uma palavra aleatória 
+    num arquivo externo 
     e cria uma máscara do tamanho adequado usando compreensão de lista
+
+    retorna:
+        uma tupla contendo a palavra e a máscara
     """
+    with open("exercicio06/palavras.txt", 'r') as arquivo:
+       palavras = [palavra.strip() for linha in arquivo for palavra in linha.split()]
+
     escolhida = random.choice(palavras)
 
     espacos = ['_' for letra in escolhida]
@@ -34,6 +21,8 @@ def selecao_palavra():
 def verificar_letra(letra, escolhida, espacos):
     """
     verifica se a entrada do usuário tem correspondência com a palavra selecionada da lista
+    retorna:
+        True para acerto ou False para erro
     """
     acertou = False
     for i in range(len(escolhida)):
@@ -42,7 +31,6 @@ def verificar_letra(letra, escolhida, espacos):
             acertou = True
     return acertou
 
-#define o jogo 
 def jogo_forca():
     """
     define a dinâmica do jogo invocando as funções selecao_palavra e verificar_letra
@@ -56,17 +44,21 @@ def jogo_forca():
         print('Palavra:', *espacos)
         print(f'Tentativas restantes: {tentativas}')
         letra = input('Digite uma letra: ').lower()
-        
-        #não adiciona letra repetida só novas letras
+
+        #não adiciona letra repetida só novas letras e não aceita int ou float
         if letra in letras_usadas:
-            print('Você já digitou essa letra!')
+            print('====== Você já digitou essa letra! ====== \n')
+        elif len(letra) > 1:
+            print('====== Você digitou mais de uma letra ====== \n')
+        elif letra.isdigit():
+            print(f'====== {letra} não é uma letra! ====== \n')
         else:
             letras_usadas.append(letra)
             if verificar_letra(letra, forca, espacos):
-                print('Letra correta!')
+                print('\nLetra correta!\n')
             #atualiza número de tentativas
             else:
-                print('Errou!')
+                print('\nErrou!\n')
                 tentativas -= 1
     
     #para o loop se a palavra está completa
@@ -77,5 +69,5 @@ def jogo_forca():
 
 
 #inicia instrução
-print('Vamos jogar forca?')
+print('===== Vamos jogar forca? =====')
 jogo_forca()
