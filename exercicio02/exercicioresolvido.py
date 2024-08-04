@@ -10,4 +10,4 @@ elif turno == "N":
     print("Boa Noite!")
 
 else:
-    print("Valor Inválido! Digite seguindo o formato mencionado à cima!")
+    print("Valor Inválido! Digite seguindo o formato mencionado acima!")
